@@ -13,3 +13,59 @@ body {
     color-scheme: dark;
   }
 }
+
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid gray;
+  padding: 15px;
+}
+
+header button {
+  background-color: #0e0e0e;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.lista-opcoes {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+main {
+  display: flex;
+  margin: 15px;
+  height: 100vh;
+  gap:15px;
+}
+
+aside {
+  width: 45%;
+  height: 100%;
+  background-color: #0e0e0e;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  overflow-y: scroll;
+}
+
+section {
+  width: 55%;
+  height: 100%;
+  background-color: #0e0e0e;
+  border-radius: 10px;
+}
+
+.card {
+  height: 100px;
+  width: 200px;
+  border-radius: 15px;
+  background-color: #4d4646;
+  margin-bottom: 5px;
+}
