@@ -1,7 +1,8 @@
 .react-router
 build
 node_modules
-README.md.env
+README.md
+.env
 .env.*
 serviceAccountKey.json
 *firebase-adminsdk*.json
