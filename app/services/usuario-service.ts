@@ -27,3 +27,20 @@ export async function obterUsuarios(): Promise<UsuarioView[] | null> {
     }
     return null;
 }
+
+export async function obterUsuario(id: string): Promise<UsuarioView | null> {
+    try {
+        const usuario_doc = doc(database, 'Usuario', id);
+        const snapshot = await getDoc(usuario_doc);
+        if (snapshot.exists()) {
+            return ({
+                id: snapshot.id,
+                data: snapshot.data()
+            } as UsuarioView);
+        }
+    }
+    catch(error) {
+        console.log("Erro em 'obterUsuarios()': ", error);
+    }
+    return null;
+}
