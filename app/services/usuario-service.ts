@@ -45,6 +45,23 @@ export async function obterUsuario(id: string): Promise<UsuarioView | null> {
     return null;
 }
 
+export async function adicionarUsuario(usuario: Usuario): Promise<string | null> {
+    try {
+        const usuarios_collection = collection(database, 'Usuario');
+        const q = query(usuarios_collection, where("nome", "==", usuario.nome));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+            throw new Error("usuário com esse nome já existe.");
+        }
+        const usuario_doc = await addDoc(usuarios_collection, usuario);
+        return usuario_doc.id;
+    }
+    catch(error) {
+        console.log("Erro em 'adicionarUsuario()': ", error);
+    }
+    return null;
+}
+
 export async function login(nome_usuario: string, pin: string): Promise<UsuarioView | null> {
     try {
         const usuarios_collection = collection(database, 'Usuario');
