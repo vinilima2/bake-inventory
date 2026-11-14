@@ -1,5 +1,5 @@
 import { database } from "~/database/firebase-config"
-import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc, getDoc, query, where } from 'firebase/firestore';
 
 export interface Usuario {
     nome: string,
@@ -44,3 +44,24 @@ export async function obterUsuario(id: string): Promise<UsuarioView | null> {
     }
     return null;
 }
+
+export async function login(nome_usuario: string, pin: string): Promise<UsuarioView | null> {
+    try {
+        const usuarios_collection = collection(database, 'Usuario');
+        const q = query(usuarios_collection, where("nome", "==", nome_usuario), where("pin", "==", pin));
+        const snapshot = await getDocs(q);
+        if (snapshot.empty) {
+            return null;
+        }
+        const usuario_doc = snapshot.docs[0];
+        return ({
+            id: usuario_doc.id,
+            data: usuario_doc.data()
+        } as UsuarioView);
+    }
+    catch(error) {
+        console.log("Erro em 'login()': ", error);
+        return null;
+    }
+}
+
