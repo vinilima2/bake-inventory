@@ -62,6 +62,18 @@ export async function adicionarUsuario(usuario: Usuario): Promise<string | null>
     return null;
 }
 
+export async function editarUsuario(id: string, novos_dados: Partial<Usuario>): Promise<UsuarioView | null> {
+    try {
+        const usuario_doc = doc(database, 'Usuario', id);
+        await updateDoc(usuario_doc, novos_dados);
+        return obterUsuario(id);
+    }
+    catch(error) {
+        console.log("Erro em 'editarUsuario()': ", error);
+    }
+    return null;
+}
+
 export async function login(nome_usuario: string, pin: string): Promise<UsuarioView | null> {
     try {
         const usuarios_collection = collection(database, 'Usuario');

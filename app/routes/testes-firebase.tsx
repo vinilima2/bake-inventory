@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { obterUsuario, obterUsuarios, login, adicionarUsuario } from '~/services/usuario-service';
+import { obterUsuario, obterUsuarios, login, adicionarUsuario, editarUsuario } from '~/services/usuario-service';
 
 //const usuarios = await obterUsuarios();
 //const usuario = await obterUsuario("qbNXhCDhxHe5XIOMrXhr");
@@ -10,8 +10,11 @@ export default function TestesFirebase() {
         //<Button onClick={() => {console.log(usuarios)}}>Obter Usuarios</Button>
         //<Button onClick={() => {console.log(usuario_log)}}>Obter Usuario</Button>
         //<Button onClick={() => {console.log(usuario_log)}}>Logar</Button>
-        <Button onClick={() => {
+        /*<Button onClick={() => {
             adicionarUsuario({ nome: "Vinicius", pin: "9999" });
-        }}>Criar</Button>
+        }}>Criar</Button>*/
+        <Button onClick={() => {
+            editarUsuario("usjVFhQeLu3tVRWPC6bm", {pin: "0911", nome: "Diego"});
+        }}>Atualizar</Button>
     );
 }
