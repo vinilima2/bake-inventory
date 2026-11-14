@@ -13,8 +13,8 @@ export interface UsuarioView {
 
 export async function obterUsuarios(): Promise<UsuarioView[] | null> {
     try {
-        const usuario_collection = collection(database, 'Usuario');
-        const snapshot = await getDocs(usuario_collection);
+        const usuarios_collection = collection(database, 'Usuario');
+        const snapshot = await getDocs(usuarios_collection);
         const usuario_docs = snapshot.docs.map((usuario_doc) => ({
             id: usuario_doc.id,
             data: usuario_doc.data() as Usuario
@@ -72,6 +72,10 @@ export async function editarUsuario(id: string, novos_dados: Partial<Usuario>): 
         console.log("Erro em 'editarUsuario()': ", error);
     }
     return null;
+}
+
+export async function excluirUsuario(id: string) {
+    // TODO...
 }
 
 export async function login(nome_usuario: string, pin: string): Promise<UsuarioView | null> {
