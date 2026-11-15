@@ -1,5 +1,5 @@
 import { database } from "~/database/firebase-config"
-import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc, getDoc, query, where } from 'firebase/firestore';
+import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc, getDoc, query, where, writeBatch } from 'firebase/firestore';
 
 export interface Produto {
     id_local_armazenamento: string,
@@ -70,4 +70,31 @@ export async function editarProduto(id: string, novos_dados: Partial<Produto>): 
         console.log("Erro em 'editarProduto()': ", error);
     }
     return null;   
+}
+
+export async function excluirProduto(id: string) {
+    try {
+        const produto_doc = doc(database, 'Produto', id);
+        deleteDoc(produto_doc);
+    } catch (error) {
+        console.log("Erro em 'excluirProduto()': ", error);
+    }
+}
+
+export async function excluirProdutos(id_local_armazenamento: string) {
+    try {
+        const produtos_collection = collection(database, 'Produto');
+        const q = query(produtos_collection, where("id_local_armazenamento", "==", id_local_armazenamento));
+        const snapshot = await getDocs(q);
+
+        const batch = writeBatch(database);
+        snapshot.forEach((produto_doc) => {
+            batch.delete(produto_doc.ref);
+        });
+        await batch.commit();
+
+    }
+    catch(error) {
+        console.log("Erro em 'excluirProdutos()': ", error);
+    }
 }
