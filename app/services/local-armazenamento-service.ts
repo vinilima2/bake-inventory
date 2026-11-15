@@ -32,3 +32,20 @@ export async function obterLocaisArmazenamento(id_estoque: string): Promise<Loca
     }
     return null;    
 }
+
+export async function obterLocalArmazenamento(id: string): Promise<LocalArmazenamentoView | null> {
+    try {
+        const local_doc = doc(database, 'LocalArmazenamento', id);
+        const snapshot = await getDoc(local_doc);
+        if (snapshot.exists()) {
+            return ({
+                id: snapshot.id,
+                data: snapshot.data()
+            } as LocalArmazenamentoView);
+        }
+    }
+    catch(error) {
+        console.log("Erro em 'obterLocalArmazenamento()': ", error);
+    }
+    return null;    
+}
