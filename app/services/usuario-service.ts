@@ -1,5 +1,6 @@
 import { database } from "~/database/firebase-config"
 import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc, getDoc, query, where } from 'firebase/firestore';
+import { excluirEstoques } from "./estoque-service";
 
 export interface Usuario {
     nome: string,
@@ -75,7 +76,13 @@ export async function editarUsuario(id: string, novos_dados: Partial<Usuario>): 
 }
 
 export async function excluirUsuario(id: string) {
-    // TODO...
+    try {
+        const usuario_doc = doc(database, 'Usuario', id);
+        await deleteDoc(usuario_doc);
+        await excluirEstoques(id);
+    } catch (error) {
+        console.log("Erro em 'excluirUsuario()': ", error);
+    }
 }
 
 export async function login(nome_usuario: string, pin: string): Promise<UsuarioView | null> {
