@@ -49,3 +49,15 @@ export async function obterLocalArmazenamento(id: string): Promise<LocalArmazena
     }
     return null;    
 }
+
+export async function adicionarLocalArmazenamento(local: LocalArmazenamento): Promise<LocalArmazenamentoView | null> {
+    try {
+        const locais_collection = collection(database, 'LocalArmazenamento');
+        const local_doc = await addDoc(locais_collection, local);
+        return obterLocalArmazenamento(local_doc.id);
+    }
+    catch(error) {
+        console.log("Erro em 'adicionarLocalArmazenamento()': ", error);
+    }
+    return null;        
+}
