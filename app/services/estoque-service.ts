@@ -57,3 +57,19 @@ export async function adicionarEstoque(estoque: Estoque): Promise<EstoqueView | 
     }
     return null;    
 }
+
+export async function editarEstoque(id: string, novos_dados: Partial<Estoque>): Promise<EstoqueView | null> {
+    try {
+        const estoque_doc = doc(database, 'Estoque', id);
+        await updateDoc(estoque_doc, novos_dados);
+        return obterEstoque(id);
+    }
+    catch(error) {
+        console.log("Erro em 'editarEstoque()': ", error);
+    }
+    return null;    
+}
+
+export async function excluirEstoque(id: string) {
+    // TODO...
+}
