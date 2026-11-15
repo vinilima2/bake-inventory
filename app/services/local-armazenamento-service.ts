@@ -61,3 +61,19 @@ export async function adicionarLocalArmazenamento(local: LocalArmazenamento): Pr
     }
     return null;        
 }
+
+export async function editarLocalArmazenamento(id: string, novos_dados: Partial<LocalArmazenamento>): Promise<LocalArmazenamentoView | null> {
+    try {
+        const local_doc = doc(database, 'LocalArmazenamento', id);
+        await updateDoc(local_doc, novos_dados);
+        return obterLocalArmazenamento(id);
+    }
+    catch(error) {
+        console.log("Erro em 'editarLocalArmazenamento()': ", error);
+    }
+    return null;    
+}
+
+export async function excluirLocalArmazenamento(id: string) {
+    // TODO...
+}

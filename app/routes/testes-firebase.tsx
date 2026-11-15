@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { adicionarEstoque, editarEstoque, obterEstoque, obterEstoques } from '~/services/estoque-service';
-import { adicionarLocalArmazenamento, obterLocaisArmazenamento, obterLocalArmazenamento } from '~/services/local-armazenamento-service';
+import { adicionarLocalArmazenamento, editarLocalArmazenamento, obterLocaisArmazenamento, obterLocalArmazenamento } from '~/services/local-armazenamento-service';
 import { obterUsuario, obterUsuarios, login, adicionarUsuario, editarUsuario } from '~/services/usuario-service';
 
 //const usuarios = await obterUsuarios();
@@ -32,8 +32,11 @@ export default function TestesFirebase() {
         }}>Atualizar</Button>*/
         //<Button onClick={() => {console.log(locais)}}>Obter Locais de Armazenamento</Button>
         //<Button onClick={() => {console.log(local)}}>Obter Local de Armazenamento</Button>
-        <Button onClick={() => {
+        /*<Button onClick={() => {
             adicionarLocalArmazenamento({ id_estoque: "e3JNOMUyYzR0SXzpgC9I", nome: "Prateleira A", observacoes: "", pos_grid_x: 10, pos_grid_y: 5, tipo: "prateleira" });
-        }}>Criar</Button>
+        }}>Criar</Button>*/
+        <Button onClick={() => {
+            editarLocalArmazenamento("P21jWYjnelasrHFiqKfZ", {pos_grid_x: 6, pos_grid_y: 7, nome: "Prateleira B"});
+        }}>Atualizar</Button>
     );
 }
