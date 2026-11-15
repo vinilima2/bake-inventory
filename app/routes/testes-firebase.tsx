@@ -1,6 +1,7 @@
 import { Button } from '@mui/material';
 import { adicionarEstoque, editarEstoque, obterEstoque, obterEstoques } from '~/services/estoque-service';
 import { adicionarLocalArmazenamento, editarLocalArmazenamento, obterLocaisArmazenamento, obterLocalArmazenamento } from '~/services/local-armazenamento-service';
+import { obterProdutos } from '~/services/produto-service';
 import { obterUsuario, obterUsuarios, login, adicionarUsuario, editarUsuario } from '~/services/usuario-service';
 
 //const usuarios = await obterUsuarios();
@@ -10,6 +11,7 @@ import { obterUsuario, obterUsuarios, login, adicionarUsuario, editarUsuario } f
 //const estoque = await obterEstoque("ckuCKULiOb4VjYPw84ZF");
 //const locais = await obterLocaisArmazenamento("e3JNOMUyYzR0SXzpgC9I");
 //const local = await obterLocalArmazenamento("dcyrQJ7NNcGOEboOp7hX");
+const produtos = await obterProdutos("dcyrQJ7NNcGOEboOp7hX");
 
 export default function TestesFirebase() {
     return (
@@ -35,8 +37,9 @@ export default function TestesFirebase() {
         /*<Button onClick={() => {
             adicionarLocalArmazenamento({ id_estoque: "e3JNOMUyYzR0SXzpgC9I", nome: "Prateleira A", observacoes: "", pos_grid_x: 10, pos_grid_y: 5, tipo: "prateleira" });
         }}>Criar</Button>*/
-        <Button onClick={() => {
+        /*<Button onClick={() => {
             editarLocalArmazenamento("P21jWYjnelasrHFiqKfZ", {pos_grid_x: 6, pos_grid_y: 7, nome: "Prateleira B"});
-        }}>Atualizar</Button>
+        }}>Atualizar</Button>*/
+        <Button onClick={() => {console.log(produtos)}}>Obter Produtos</Button>
     );
 }
