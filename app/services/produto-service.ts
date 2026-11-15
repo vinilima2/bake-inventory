@@ -30,3 +30,20 @@ export async function obterProdutos(id_local: string): Promise<ProdutoView[] | n
     }
     return null; 
 }
+
+export async function obterProduto(id: string): Promise<ProdutoView | null> {
+    try {
+        const local_doc = doc(database, 'Produto', id);
+        const snapshot = await getDoc(local_doc);
+        if (snapshot.exists()) {
+            return ({
+                id: snapshot.id,
+                data: snapshot.data()
+            } as ProdutoView);
+        }
+    }
+    catch(error) {
+        console.log("Erro em 'obterProduto()': ", error);
+    }
+    return null;  
+}
