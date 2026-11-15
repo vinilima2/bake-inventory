@@ -24,6 +24,27 @@ Install the dependencies:
 npm install
 ```
 
+### Firebase (banco de dados)
+
+O app usa o Cloud Firestore pelo Admin SDK, só no servidor. Para rodar localmente:
+
+1. Peça a um integrante o JSON da conta de serviço (ou gere o seu em Console do
+   Firebase > Configurações do projeto > Contas de serviço) e salve na raiz do
+   projeto como `serviceAccountKey.json`.
+2. Copie `.env.example` para `.env`.
+3. Com `npm run dev` rodando, abra `http://localhost:5173/api/status`. A resposta
+   deve ser `{"firestore":"ok"}`.
+
+`serviceAccountKey.json` e `.env` estão no `.gitignore`: **nunca** envie esses
+arquivos para o GitHub nem para o grupo em canais públicos.
+
+No código, importe `db` de `~/lib/firebase.server` ou as funções de
+`~/lib/dados.server` apenas dentro de `loader`/`action`. Os tipos das entidades
+ficam em `~/lib/tipos`.
+
+Em produção (`npm run start`) o `.env` não é lido automaticamente: defina
+`GOOGLE_APPLICATION_CREDENTIALS` ou `FIREBASE_SERVICE_ACCOUNT` no ambiente.
+
 ### Development
 
 Start the development server with HMR:

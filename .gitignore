@@ -5,3 +5,9 @@
 # React Router
 /.react-router/
 /build/
+
+# Credenciais (nunca versionar)
+.env.*
+!.env.example
+serviceAccountKey.json
+*firebase-adminsdk*.json
