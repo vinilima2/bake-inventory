@@ -59,3 +59,15 @@ export async function adicionarProduto(produto: Produto): Promise<ProdutoView | 
     }
     return null;   
 }
+
+export async function editarProduto(id: string, novos_dados: Partial<Produto>): Promise<ProdutoView | null> {
+    try {
+        const produto_doc = doc(database, 'Produto', id);
+        await updateDoc(produto_doc, novos_dados);
+        return obterProduto(id);
+    }
+    catch(error) {
+        console.log("Erro em 'editarProduto()': ", error);
+    }
+    return null;   
+}
