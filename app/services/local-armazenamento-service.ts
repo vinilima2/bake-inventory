@@ -1,5 +1,6 @@
 import { database } from "~/database/firebase-config"
 import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc, getDoc, query, where } from 'firebase/firestore';
+import { excluirProdutos } from "./produto-service";
 
 export interface LocalArmazenamento {
     id_estoque: string,
@@ -75,5 +76,23 @@ export async function editarLocalArmazenamento(id: string, novos_dados: Partial<
 }
 
 export async function excluirLocalArmazenamento(id: string) {
-    // TODO...
+    try {
+        const local_doc = doc(database, 'LocalArmazenamento', id);
+        await deleteDoc(local_doc);
+        await excluirProdutos(id);
+    } catch (error) {
+        console.log("Erro em 'excluirLocalArmazenamento()': ", error);
+    }
+}
+
+export async function excluirLocaisArmazenamento(id_estoque: string) {
+    try {
+        const locais_collection = collection(database, 'LocalArmazenamento');
+        const local_docs = await getDocs(locais_collection);
+        local_docs.docs.forEach((local) => {
+            excluirLocalArmazenamento(local.id);
+        });
+    } catch (error) {
+        console.log("Erro em 'excluirLocaisArmazenamento()': ", error);
+    }
 }

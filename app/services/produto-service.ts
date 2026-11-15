@@ -75,7 +75,7 @@ export async function editarProduto(id: string, novos_dados: Partial<Produto>): 
 export async function excluirProduto(id: string) {
     try {
         const produto_doc = doc(database, 'Produto', id);
-        deleteDoc(produto_doc);
+        await deleteDoc(produto_doc);
     } catch (error) {
         console.log("Erro em 'excluirProduto()': ", error);
     }
