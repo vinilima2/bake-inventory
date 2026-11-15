@@ -45,3 +45,15 @@ export async function obterEstoque(id: string): Promise<EstoqueView | null> {
     }
     return null;
 }
+
+export async function adicionarEstoque(estoque: Estoque): Promise<EstoqueView | null> {
+    try {
+        const estoques_collection = collection(database, 'Estoque');
+        const estoque_doc = await addDoc(estoques_collection, estoque);
+        return obterEstoque(estoque_doc.id);
+    }
+    catch(error) {
+        console.log("Erro em 'adicionarEstoque()': ", error);
+    }
+    return null;    
+}

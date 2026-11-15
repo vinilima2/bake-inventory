@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { obterEstoque, obterEstoques } from '~/services/estoque-service';
+import { adicionarEstoque, obterEstoque, obterEstoques } from '~/services/estoque-service';
 import { obterUsuario, obterUsuarios, login, adicionarUsuario, editarUsuario } from '~/services/usuario-service';
 
 //const usuarios = await obterUsuarios();
@@ -20,6 +20,9 @@ export default function TestesFirebase() {
             editarUsuario("usjVFhQeLu3tVRWPC6bm", {pin: "0911", nome: "Diego"});
         }}>Atualizar</Button>*/
         //<Button onClick={() => {console.log(estoque)}}>Obter Estoques</Button>
-        <Button onClick={() => {console.log(estoque)}}>Obter Estoque</Button>
+        //<Button onClick={() => {console.log(estoque)}}>Obter Estoque</Button>
+        <Button onClick={() => {
+            adicionarEstoque({ nome: "Depósito Bebidas", id_usuario: "qbNXhCDhxHe5XIOMrXhr" });
+        }}>Criar</Button>
     );
 }

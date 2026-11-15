@@ -45,7 +45,7 @@ export async function obterUsuario(id: string): Promise<UsuarioView | null> {
     return null;
 }
 
-export async function adicionarUsuario(usuario: Usuario): Promise<string | null> {
+export async function adicionarUsuario(usuario: Usuario): Promise<UsuarioView | null> {
     try {
         const usuarios_collection = collection(database, 'Usuario');
         const q = query(usuarios_collection, where("nome", "==", usuario.nome));
@@ -54,7 +54,7 @@ export async function adicionarUsuario(usuario: Usuario): Promise<string | null>
             throw new Error("usuário com esse nome já existe.");
         }
         const usuario_doc = await addDoc(usuarios_collection, usuario);
-        return usuario_doc.id;
+        return obterUsuario(usuario_doc.id);
     }
     catch(error) {
         console.log("Erro em 'adicionarUsuario()': ", error);
