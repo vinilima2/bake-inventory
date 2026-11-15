@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { adicionarEstoque, editarEstoque, obterEstoque, obterEstoques } from '~/services/estoque-service';
 import { adicionarLocalArmazenamento, editarLocalArmazenamento, obterLocaisArmazenamento, obterLocalArmazenamento } from '~/services/local-armazenamento-service';
-import { obterProduto, obterProdutos } from '~/services/produto-service';
+import { adicionarProduto, obterProduto, obterProdutos } from '~/services/produto-service';
 import { obterUsuario, obterUsuarios, login, adicionarUsuario, editarUsuario } from '~/services/usuario-service';
 
 //const usuarios = await obterUsuarios();
@@ -42,6 +42,9 @@ export default function TestesFirebase() {
             editarLocalArmazenamento("P21jWYjnelasrHFiqKfZ", {pos_grid_x: 6, pos_grid_y: 7, nome: "Prateleira B"});
         }}>Atualizar</Button>*/
         //<Button onClick={() => {console.log(produtos)}}>Obter Produtos</Button>
-        <Button onClick={() => {console.log(produto)}}>Obter Produto</Button>
+        //<Button onClick={() => {console.log(produto)}}>Obter Produto</Button>
+        <Button onClick={() => {
+            adicionarProduto({id_local_armazenamento: "P21jWYjnelasrHFiqKfZ", nome: "Pão", observacoes: "Francês", quantidade: 900});
+        }}>Criar</Button>
     );
 }

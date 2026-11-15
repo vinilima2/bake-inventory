@@ -47,3 +47,15 @@ export async function obterProduto(id: string): Promise<ProdutoView | null> {
     }
     return null;  
 }
+
+export async function adicionarProduto(produto: Produto): Promise<ProdutoView | null> {
+    try {
+        const produtos_collection = collection(database, 'Produto');
+        const produto_doc = await addDoc(produtos_collection, produto);
+        return obterProduto(produto_doc.id);
+    }
+    catch(error) {
+        console.log("Erro em 'adicionarProduto()': ", error);
+    }
+    return null;   
+}
