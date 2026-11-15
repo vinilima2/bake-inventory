@@ -1,5 +1,6 @@
 import { database } from "~/database/firebase-config"
 import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc, getDoc, query, where } from 'firebase/firestore';
+import { excluirLocaisArmazenamento } from "./local-armazenamento-service";
 
 export interface Estoque {
     id_usuario: string,
@@ -71,5 +72,24 @@ export async function editarEstoque(id: string, novos_dados: Partial<Estoque>): 
 }
 
 export async function excluirEstoque(id: string) {
-    // TODO...
+    try {
+        const estoque_doc = doc(database, 'Estoque', id);
+        await deleteDoc(estoque_doc);
+        await excluirLocaisArmazenamento(id);
+    } catch (error) {
+        console.log("Erro em 'excluirEstoque()': ", error);
+    }
+}
+
+export async function excluirEstoques(id_usuario: string) {
+    try {
+        const estoques_collection = collection(database, 'Estoque');
+        const q = query(estoques_collection, where("id_usuario", "==", id_usuario));
+        const estoque_docs = await getDocs(q);
+        estoque_docs.docs.forEach((estoque) => {
+            excluirEstoque(estoque.id);
+        });
+    } catch (error) {
+        console.log("Erro em 'excluirEstoques()': ", error);
+    }
 }
