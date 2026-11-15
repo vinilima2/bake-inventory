@@ -40,7 +40,7 @@ export async function obterUsuario(id: string): Promise<UsuarioView | null> {
         }
     }
     catch(error) {
-        console.log("Erro em 'obterUsuarios()': ", error);
+        console.log("Erro em 'obterUsuario()': ", error);
     }
     return null;
 }

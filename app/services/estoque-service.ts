@@ -28,3 +28,20 @@ export async function obterEstoques(id_usuario: string): Promise<EstoqueView[] |
     }
     return null;
 }
+
+export async function obterEstoque(id: string): Promise<EstoqueView | null> {
+    try {
+        const estoque_doc = doc(database, 'Estoque', id);
+        const snapshot = await getDoc(estoque_doc);
+        if (snapshot.exists()) {
+            return ({
+                id: snapshot.id,
+                data: snapshot.data()
+            } as EstoqueView);
+        }
+    }
+    catch(error) {
+        console.log("Erro em 'obterEstoque()': ", error);
+    }
+    return null;
+}
