@@ -88,7 +88,8 @@ export async function excluirLocalArmazenamento(id: string) {
 export async function excluirLocaisArmazenamento(id_estoque: string) {
     try {
         const locais_collection = collection(database, 'LocalArmazenamento');
-        const local_docs = await getDocs(locais_collection);
+        const q = query(locais_collection, where("id_estoque", "==", id_estoque));
+        const local_docs = await getDocs(q);
         local_docs.docs.forEach((local) => {
             excluirLocalArmazenamento(local.id);
         });
