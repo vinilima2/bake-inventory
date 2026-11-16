@@ -55,11 +55,15 @@ export async function adicionarLocalArmazenamento(local: LocalArmazenamento): Pr
     try {
         const locais_collection = collection(database, 'LocalArmazenamento');
         const local_doc = await addDoc(locais_collection, local);
-        return obterLocalArmazenamento(local_doc.id);
+        return {
+    id: local_doc.id,
+    data: local,
+};
     }
     catch(error) {
         console.log("Erro em 'adicionarLocalArmazenamento()': ", error);
-    }
+    throw error; 
+}
     return null;        
 }
 
@@ -71,7 +75,8 @@ export async function editarLocalArmazenamento(id: string, novos_dados: Partial<
     }
     catch(error) {
         console.log("Erro em 'editarLocalArmazenamento()': ", error);
-    }
+    throw error;
+}
     return null;    
 }
 
@@ -82,7 +87,8 @@ export async function excluirLocalArmazenamento(id: string) {
         await excluirProdutos(id);
     } catch (error) {
         console.log("Erro em 'excluirLocalArmazenamento()': ", error);
-    }
+   throw error;
+}
 }
 
 export async function excluirLocaisArmazenamento(id_estoque: string) {
@@ -90,10 +96,11 @@ export async function excluirLocaisArmazenamento(id_estoque: string) {
         const locais_collection = collection(database, 'LocalArmazenamento');
         const q = query(locais_collection, where("id_estoque", "==", id_estoque));
         const local_docs = await getDocs(q);
-        local_docs.docs.forEach((local) => {
-            excluirLocalArmazenamento(local.id);
-        });
+        for (const local of local_docs.docs) {
+    await excluirLocalArmazenamento(local.id);
+}
     } catch (error) {
         console.log("Erro em 'excluirLocaisArmazenamento()': ", error);
-    }
+    throw error;
+}
 }

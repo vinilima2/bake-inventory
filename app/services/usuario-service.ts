@@ -55,11 +55,15 @@ export async function adicionarUsuario(usuario: Usuario): Promise<UsuarioView | 
             throw new Error("usuário com esse nome já existe.");
         }
         const usuario_doc = await addDoc(usuarios_collection, usuario);
-        return obterUsuario(usuario_doc.id);
+        return {
+    id: usuario_doc.id,
+    data: usuario,
+};
     }
     catch(error) {
         console.log("Erro em 'adicionarUsuario()': ", error);
-    }
+    throw error;
+}
     return null;
 }
 
@@ -71,7 +75,8 @@ export async function editarUsuario(id: string, novos_dados: Partial<Usuario>): 
     }
     catch(error) {
         console.log("Erro em 'editarUsuario()': ", error);
-    }
+    throw error;
+}
     return null;
 }
 
@@ -82,7 +87,8 @@ export async function excluirUsuario(id: string) {
         await excluirEstoques(id);
     } catch (error) {
         console.log("Erro em 'excluirUsuario()': ", error);
-    }
+    throw error;
+}
 }
 
 export async function login(nome_usuario: string, pin: string): Promise<UsuarioView | null> {

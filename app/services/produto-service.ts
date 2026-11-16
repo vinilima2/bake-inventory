@@ -52,11 +52,15 @@ export async function adicionarProduto(produto: Produto): Promise<ProdutoView | 
     try {
         const produtos_collection = collection(database, 'Produto');
         const produto_doc = await addDoc(produtos_collection, produto);
-        return obterProduto(produto_doc.id);
+        return {
+    id: produto_doc.id,
+    data: produto,
+};
     }
     catch(error) {
         console.log("Erro em 'adicionarProduto()': ", error);
-    }
+    throw error;
+}
     return null;   
 }
 
@@ -68,16 +72,18 @@ export async function editarProduto(id: string, novos_dados: Partial<Produto>): 
     }
     catch(error) {
         console.log("Erro em 'editarProduto()': ", error);
+        throw error;
     }
     return null;   
 }
 
-export async function excluirProduto(id: string) {
+export async function excluirProduto(id: string): Promise<void> {
     try {
         const produto_doc = doc(database, 'Produto', id);
         await deleteDoc(produto_doc);
     } catch (error) {
         console.log("Erro em 'excluirProduto()': ", error);
+        throw error;
     }
 }
 
@@ -94,7 +100,8 @@ export async function excluirProdutos(id_local_armazenamento: string) {
         await batch.commit();
 
     }
-    catch(error) {
-        console.log("Erro em 'excluirProdutos()': ", error);
-    }
+   catch (error) {
+    console.log("Erro em 'excluirProdutos()': ", error);
+    throw error;
+}
 }
