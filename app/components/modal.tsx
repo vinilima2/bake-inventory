@@ -1,4 +1,3 @@
+import ModalPin from "./modal-pin";
 
-export default function Modal() {
-  return <></>;
-}
+export default ModalPin;
