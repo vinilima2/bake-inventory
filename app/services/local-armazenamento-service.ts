@@ -1,5 +1,17 @@
-import { database } from "~/database/firebase-config"
-import { collection, addDoc, doc, deleteDoc, getDocs, updateDoc, getDoc, query, where } from 'firebase/firestore';
+
+import { database } from "~/database/firebase-config";
+import {
+    collection,
+    addDoc,
+    doc,
+    deleteDoc,
+    getDocs,
+    updateDoc,
+    getDoc,
+    query,
+    where
+} from 'firebase/firestore';
+
 import { excluirProdutos } from "./produto-service";
 
 export interface LocalArmazenamento {
@@ -12,15 +24,24 @@ export interface LocalArmazenamento {
 }
 
 export interface LocalArmazenamentoView {
-    id: string, 
+    id: string,
     data: LocalArmazenamento
 }
 
-export async function obterLocaisArmazenamento(id_estoque: string): Promise<LocalArmazenamentoView[] | null> {
+// Obter todos os locais de armazenamento de um estoque.
+export async function obterLocaisArmazenamento(
+    id_estoque: string
+): Promise<LocalArmazenamentoView[] | null> {
     try {
         const locais_collection = collection(database, 'LocalArmazenamento');
-        const q = query(locais_collection, where("id_estoque", "==", id_estoque));
+
+        const q = query(
+            locais_collection,
+            where("id_estoque", "==", id_estoque)
+        );
+
         const snapshot = await getDocs(q);
+
         const local_docs = snapshot.docs.map((local_doc) => ({
             id: local_doc.id,
             data: local_doc.data() as LocalArmazenamento
@@ -28,79 +49,136 @@ export async function obterLocaisArmazenamento(id_estoque: string): Promise<Loca
 
         return local_docs;
     }
-    catch(error) {
+    catch (error) {
         console.log("Erro em 'obterLocaisArmazenamento()': ", error);
+        return null;
     }
-    return null;    
 }
 
-export async function obterLocalArmazenamento(id: string): Promise<LocalArmazenamentoView | null> {
+// Obter um local de armazenamento pelo ID.
+export async function obterLocalArmazenamento(
+    id: string
+): Promise<LocalArmazenamentoView | null> {
     try {
         const local_doc = doc(database, 'LocalArmazenamento', id);
+
         const snapshot = await getDoc(local_doc);
+
         if (snapshot.exists()) {
-            return ({
+            return {
                 id: snapshot.id,
-                data: snapshot.data()
-            } as LocalArmazenamentoView);
+                data: snapshot.data() as LocalArmazenamento
+            };
         }
     }
-    catch(error) {
+    catch (error) {
         console.log("Erro em 'obterLocalArmazenamento()': ", error);
     }
-    return null;    
+
+    return null;
 }
 
-export async function adicionarLocalArmazenamento(local: LocalArmazenamento): Promise<LocalArmazenamentoView | null> {
+// Adicionar um local de armazenamento.
+export async function adicionarLocalArmazenamento(
+    local: LocalArmazenamento
+): Promise<LocalArmazenamentoView | null> {
     try {
         const locais_collection = collection(database, 'LocalArmazenamento');
+
         const local_doc = await addDoc(locais_collection, local);
+
         return {
-    id: local_doc.id,
-    data: local,
-};
+            id: local_doc.id,
+            data: local
+        };
     }
-    catch(error) {
+    catch (error) {
         console.log("Erro em 'adicionarLocalArmazenamento()': ", error);
-    throw error; 
-}
-    return null;        
+        throw error;
+    }
 }
 
-export async function editarLocalArmazenamento(id: string, novos_dados: Partial<LocalArmazenamento>): Promise<LocalArmazenamentoView | null> {
+// Editar um local de armazenamento.
+export async function editarLocalArmazenamento(
+    id: string,
+    novos_dados: Partial<LocalArmazenamento>
+): Promise<LocalArmazenamentoView | null> {
     try {
         const local_doc = doc(database, 'LocalArmazenamento', id);
+
         await updateDoc(local_doc, novos_dados);
+
         return obterLocalArmazenamento(id);
     }
-    catch(error) {
+    catch (error) {
         console.log("Erro em 'editarLocalArmazenamento()': ", error);
-    throw error;
-}
-    return null;    
+        throw error;
+    }
 }
 
+// Excluir um local de armazenamento e seus produtos.
 export async function excluirLocalArmazenamento(id: string) {
     try {
         const local_doc = doc(database, 'LocalArmazenamento', id);
+
         await deleteDoc(local_doc);
+
         await excluirProdutos(id);
-    } catch (error) {
+    }
+    catch (error) {
         console.log("Erro em 'excluirLocalArmazenamento()': ", error);
-   throw error;
-}
+        throw error;
+    }
 }
 
+// Excluir todos os locais de armazenamento de um estoque.
 export async function excluirLocaisArmazenamento(id_estoque: string) {
     try {
         const locais_collection = collection(database, 'LocalArmazenamento');
-        const q = query(locais_collection, where("id_estoque", "==", id_estoque));
+
+        const q = query(
+            locais_collection,
+            where("id_estoque", "==", id_estoque)
+        );
+
         const local_docs = await getDocs(q);
+
         for (const local of local_docs.docs) {
-    await excluirLocalArmazenamento(local.id);
-}
-    } catch (error) {
+            await excluirLocalArmazenamento(local.id);
+        }
+    }
+    catch (error) {
         console.log("Erro em 'excluirLocaisArmazenamento()': ", error);
-    throw error;
+        throw error;
+    }
 }
+
+// Obter todos os tipos diferentes de locais de armazenamento de um estoque.
+export async function obterTiposLocaisArmazenamento(
+    id_estoque: string
+): Promise<string[] | null> {
+    try {
+        const locais_collection = collection(
+            database,
+            'LocalArmazenamento'
+        );
+
+        const q = query(
+            locais_collection,
+            where("id_estoque", "==", id_estoque)
+        );
+
+        const snapshot = await getDocs(q);
+
+        const tipos = snapshot.docs.map((local_doc) => {
+            const local = local_doc.data() as LocalArmazenamento;
+            return local.tipo;
+        });
+
+        return [...new Set(tipos)];
+    }
+    catch (error) {
+        console.log("Erro em 'obterTiposLocaisArmazenamento()': ", error);
+        return null;
+    }
 }
