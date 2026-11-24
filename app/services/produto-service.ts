@@ -105,3 +105,48 @@ export async function excluirProdutos(id_local_armazenamento: string) {
     throw error;
 }
 }
+/**
+ * Retorna todos os produtos cadastrados em um estoque,
+ * independentemente do local de armazenamento.
+ */
+export async function obterProdutosPorEstoque(
+    id_estoque: string
+): Promise<ProdutoView[] | null> {
+    try {
+        // Busca todos os locais pertencentes ao estoque.
+        const locais_collection = collection(database, 'LocalArmazenamento');
+
+        const q_locais = query(
+            locais_collection,
+            where("id_estoque", "==", id_estoque)
+        );
+
+        const locais_snapshot = await getDocs(q_locais);
+
+        // Busca os produtos de cada local encontrado.
+        const produtos_por_local = await Promise.all(
+            locais_snapshot.docs.map(async (local_doc) => {
+                const produtos_collection = collection(database, 'Produto');
+
+                const q_produtos = query(
+                    produtos_collection,
+                    where("id_local_armazenamento", "==", local_doc.id)
+                );
+
+                const produtos_snapshot = await getDocs(q_produtos);
+
+                return produtos_snapshot.docs.map((produto_doc) => ({
+                    id: produto_doc.id,
+                    data: produto_doc.data() as Produto
+                }));
+            })
+        );
+
+        // Junta os resultados em uma única lista.
+        return produtos_por_local.flat();
+    }
+    catch (error) {
+        console.log("Erro em 'obterProdutosPorEstoque()': ", error);
+        return null;
+    }
+}
